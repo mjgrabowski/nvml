@@ -31,58 +31,31 @@
 #
 
 #
-# src/test/Makefile -- build all unit tests
+# src/test/icount/Makefile -- build icount
 #
-# Makefile -- build all unit tests
-#
-TEST = blk_nblock\
-       blk_recovery\
-       blk_rw\
-       blk_rw_mt\
-       checksum\
-       log_basic\
-       log_recovery\
-       log_walker\
-       pmem_clflush_proc\
-       pmem_is_pmem\
-       pmem_is_pmem_proc\
-       pmem_map\
-       pmem_map_raw\
-       scope\
-       traces\
-       traces_custom_function\
-       util_map_proc\
-       vmem_aligned_alloc\
-       vmem_calloc\
-       vmem_check_allocations\
-       vmem_check_version\
-       vmem_custom_alloc\
-       vmem_freespace\
-       vmem_malloc\
-       vmem_mix_allocations\
-       vmem_multiple_pools\
-       vmem_out_of_memory\
-       vmem_pool_create\
-       vmem_pool_create_error\
-       vmem_pool_create_in_region\
-       vmem_realloc\
-       vmem_stats\
-       vmem_strdup\
-       vmem_valgrind\
-       icount
 
-all     : TARGET = all
-clean   : TARGET = clean
-clobber : TARGET = clobber
-test    : TARGET = test
-cstyle  : TARGET = cstyle
+TARGET = icount.a
+OBJS = icount.o
+CFLAGS = -ggdb -Wall -Werror -std=gnu99
+INCS = -I../unittest -I../../include
 
-all clean clobber test cstyle: $(TEST)
+all test: $(TARGET)
 
-$(TEST): unittest
-	$(MAKE) -C $@ $(TARGET)
+$(TARGET): $(OBJS)
+	$(AR) rv $@ $(OBJS)
 
-unittest:
-	$(MAKE) -C $@ $(TARGET)
+.c.o:
+	$(CC) -c $(CFLAGS) $(LIBS) $(INCS) $< -o $@
 
-.PHONY: all clean clobber test cstyle unittest $(TEST)
+clean:
+	$(RM) *.o core a.out
+
+cstyle:
+	../../../utils/cstyle -pP *.[ch]
+
+clobber: clean
+	$(RM) $(TARGET)
+
+.PHONY: clean clobber
+
+icount.o: icount.c icount.h

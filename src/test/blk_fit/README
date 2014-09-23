@@ -1,0 +1,31 @@
+Linux NVM Library
+
+This is src/test/blk_nblock/README.
+
+This directory contains a set of unit tests which goal is to verify if
+an operation of adding a block to an existing pool or clearing it can
+be performed atomically.
+
+TEST0:
+
+	Step 1:
+	The program blk_fit_write.c creates and opens a file, mmaps it, opens
+	the pool and then fills up a given block number with a given value (it
+	shall not be 0). It's called a few times. Next the pool content is dumped.
+	The blk_fit_walk.c prints out what's inside the pool and the output	stream
+	is redirected into the pool.dump.0 file.
+
+	Step 2:
+	Then the blk_fit_write.c is	run once again to modify one of the already written
+	blocks. If 0 is used as a value to be written into the block, pmemblk_set_zero()
+	is called, otherwise pmemblk_write(). Once again the pool snapshot is taken and
+	stored in the pool.dump.1 file.
+
+	Step 3:
+	Steps 1 and 2 are repeated. However, previously taken snapshots are skipped
+	and a change to the block is done under the control of 'icount' where it may be
+	interrupted. Each time 'icount'	kills the blk_fit_write.c execution, snapshot of
+	the blk pool is	stored in the pool.dump.3 file. Then, pool consistency is checked.
+	It's done by running the blk_fit_check.c program which just calls the pmemblk_check()
+	routine	and the	execution of the pool_fit_cmp script which verifies if the pool.dump.3
+	file matches either the pool.dump.0 or the pool.dump.1 file.
