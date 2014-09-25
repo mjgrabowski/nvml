@@ -1,10 +1,10 @@
 Linux NVM Library
 
-This is src/test/blk_nblock/README.
+This is src/test/log_fit/README.
 
 This directory contains a set of unit tests which goal is to verify if
 an operation of appending a single log entry, appending multiple scattered
-log entries can be done atomically. 
+log entries can be done atomically.
 
 TEST0:
 
@@ -24,7 +24,7 @@ TEST0:
 	Steps 1 and 2 are repeated in a slightly changed form. Previously taken
 	snapshots are skipped and the step 2 is done under the 'icount' control, so
 	it is interrupted after a given number of instructions. Each time the execution
-	of the log_fit_append.c is interrupted, snapshot of the log pool is	stored in
+	of the log_fit_append.c is interrupted, snapshot of the log pool is stored in
 	the pool.dump.3 file. Then, pool consistency is checked. It's done by running
 	the log_fit_check.c program which just calls the pmemlog_check() routine and the
 	execution of the pool_fit_cmp script which verifies if the pool.dump.3 file matches
